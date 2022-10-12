@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ArticlesController;
+use App\Http\Controllers\EpisodesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +19,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Route::get('/dashboard', function () {
+    $articles=App\Models\Article::get();
+    return view('dashboard',compact('articles'));
+})->middleware(['auth'])->name('dashboard');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/articles/{article:slug}', ArticlesController::class);
+Route::get('/episodes/{episode:slug}', EpisodesController::class);
+
+require __DIR__.'/auth.php';
